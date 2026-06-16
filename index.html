@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Growth OS — Ved Sanjeevani</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Clash+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap');
+:root{
+  --green:#a8d44a;--green2:#7ec832;--gold:#f0c040;--gold2:#c8900a;
+  --bg:#060608;--card:#0d0f0a;--glass:rgba(255,255,255,0.04);
+  --border:rgba(168,212,74,0.15);--border2:rgba(255,255,255,0.07);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:#fff;overflow-x:hidden;}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before{content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.4;}
+
+/* ── ANIMATED BG ORBS ── */
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;animation:orbFloat 8s ease-in-out infinite;}
+.orb1{width:500px;height:500px;background:radial-gradient(circle,rgba(168,212,74,.12),transparent 70%);top:-150px;right:-150px;animation-delay:0s;}
+.orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(240,192,64,.08),transparent 70%);bottom:-100px;left:-100px;animation-delay:-3s;}
+.orb3{width:300px;height:300px;background:radial-gradient(circle,rgba(168,212,74,.06),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation-delay:-5s;}
+@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-40px) scale(1.05);}}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 48px;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(6,6,8,0.7);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border2);}
+.nav-logo{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;
+  background:linear-gradient(135deg,var(--green),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-badge{display:flex;align-items:center;gap:8px;
+  background:rgba(168,212,74,0.08);border:1px solid var(--border);
+  padding:6px 14px;border-radius:20px;font-size:11px;color:var(--green);font-weight:700;letter-spacing:1px;}
+.blinkit-dot{width:8px;height:8px;background:#f0c040;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(240,192,64,0.6);}50%{box-shadow:0 0 0 8px rgba(240,192,64,0);}}
+</style>
+<style>
+/* ── HERO ── */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;
+  padding:120px 48px 80px;overflow:hidden;z-index:1;}
+.hero-inner{max-width:900px;margin:0 auto;width:100%;}
+.hero-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:32px;flex-wrap:wrap;}
+.pill{display:inline-flex;align-items:center;gap:8px;
+  padding:8px 18px;border-radius:30px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.pill-green{background:rgba(168,212,74,.1);border:1px solid rgba(168,212,74,.3);color:var(--green);}
+.pill-gold{background:rgba(240,192,64,.1);border:1px solid rgba(240,192,64,.3);color:var(--gold);}
+.pill-gold .icon{font-size:14px;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(44px,7vw,88px);
+  font-weight:800;line-height:1.0;letter-spacing:-3px;margin-bottom:16px;}
+.hero h1 .line1{display:block;color:#fff;}
+.hero h1 .line2{display:block;
+  background:linear-gradient(135deg,var(--green) 0%,var(--gold) 60%,var(--green) 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:shimmer 4s linear infinite;}
+@keyframes shimmer{0%{background-position:0% center;}100%{background-position:200% center;}}
+.hero-sub{font-size:18px;color:#666;line-height:1.75;max-width:580px;margin-bottom:48px;font-weight:400;}
+.hero-meta-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--border2);border-radius:16px;overflow:hidden;margin-bottom:48px;}
+.meta-box{background:rgba(13,15,10,0.9);padding:20px 24px;backdrop-filter:blur(10px);}
+.meta-box .ml{font-size:10px;color:#444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;}
+.meta-box .mv{font-size:15px;font-weight:700;color:#e0e0e0;}
+.meta-box .mv.green{color:var(--green);}
+/* 3D floating card */
+.hero-card{position:absolute;right:48px;top:50%;transform:translateY(-50%);
+  width:280px;background:rgba(13,15,10,0.8);border:1px solid var(--border);
+  border-radius:24px;padding:28px;backdrop-filter:blur(20px);
+  box-shadow:0 40px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(168,212,74,0.1),inset 0 1px 0 rgba(255,255,255,0.05);
+  animation:float3d 6s ease-in-out infinite;transform-style:preserve-3d;}
+@keyframes float3d{
+  0%,100%{transform:translateY(-50%) rotateX(2deg) rotateY(-4deg) translateZ(0);}
+  25%{transform:translateY(calc(-50% - 15px)) rotateX(-2deg) rotateY(4deg) translateZ(20px);}
+  50%{transform:translateY(calc(-50% - 10px)) rotateX(3deg) rotateY(-2deg) translateZ(10px);}
+  75%{transform:translateY(calc(-50% - 20px)) rotateX(-1deg) rotateY(3deg) translateZ(15px);}
+}
+.hc-label{font-size:10px;color:#444;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:20px;}
+.hc-price{font-size:36px;font-weight:900;color:var(--green);line-height:1;margin-bottom:4px;}
+.hc-pm{font-size:12px;color:#555;margin-bottom:20px;}
+.hc-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.hc-item:last-child{border:none;}
+.hc-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.hc-dot.gold{background:var(--gold);}
+.hc-item span{font-size:12px;color:#888;}
+
+/* ── SECTIONS ── */
+.section{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:80px 48px;}
+.sec-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:3px;
+  color:var(--green);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sec-label::before{content:'';width:24px;height:2px;background:var(--green);display:inline-block;}
+.section h2{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,48px);
+  font-weight:800;letter-spacing:-1px;margin-bottom:32px;line-height:1.1;}
+.divider{border:none;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);margin:0;}
+
+/* ── CREDIBILITY BAR ── */
+.cred-bar{position:relative;z-index:1;background:linear-gradient(135deg,rgba(240,192,64,0.08),rgba(168,212,74,0.06));
+  border-top:1px solid rgba(240,192,64,0.2);border-bottom:1px solid rgba(240,192,64,0.2);
+  padding:32px 48px;}
+.cred-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:32px;flex-wrap:wrap;}
+.cred-logo{display:flex;align-items:center;gap:12px;}
+.blinkit-badge{background:var(--gold);color:#000;font-size:13px;font-weight:900;
+  padding:8px 18px;border-radius:8px;letter-spacing:.5px;}
+.cred-arrow{color:#444;font-size:20px;}
+.cred-text{flex:1;}
+.cred-text h3{font-size:17px;font-weight:700;margin-bottom:4px;}
+.cred-text p{font-size:14px;color:#666;line-height:1.6;}
+.cred-stats{display:flex;gap:32px;flex-wrap:wrap;}
+.cred-stat .n{font-size:28px;font-weight:900;color:var(--gold);line-height:1;}
+.cred-stat .l{font-size:11px;color:#555;margin-top:2px;}
+</style>
+<style>
+/* ── FOCUS CARDS 3D ── */
+.focus-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.focus-card{background:var(--glass);border:1px solid var(--border2);border-radius:20px;
+  padding:28px 24px;cursor:default;transition:all 0.4s cubic-bezier(0.23,1,0.32,1);
+  transform-style:preserve-3d;position:relative;overflow:hidden;}
+.focus-card::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,rgba(168,212,74,0.08),transparent 70%);
+  opacity:0;transition:opacity 0.4s;}
+.focus-card:hover{transform:translateY(-12px) rotateX(4deg) rotateY(-2deg);
+  border-color:rgba(168,212,74,0.4);
+  box-shadow:0 30px 60px rgba(0,0,0,0.5),0 0 30px rgba(168,212,74,0.1);}
+.focus-card:hover::before{opacity:1;}
+.focus-card.gold-card:hover{border-color:rgba(240,192,64,0.4);box-shadow:0 30px 60px rgba(0,0,0,0.5),0 0 30px rgba(240,192,64,0.1);}
+.focus-card.gold-card::before{background:radial-gradient(circle at 50% 0%,rgba(240,192,64,0.08),transparent 70%);}
+.fc-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:16px;background:rgba(168,212,74,0.08);border:1px solid rgba(168,212,74,0.15);}
+.fc-icon.gold{background:rgba(240,192,64,0.08);border-color:rgba(240,192,64,0.15);}
+.focus-card h3{font-size:15px;font-weight:700;margin-bottom:8px;color:#e8e8e8;}
+.focus-card p{font-size:13px;color:#555;line-height:1.65;}
+
+/* ── INCLUSIONS ── */
+.cat-block{margin-bottom:40px;}
+.cat-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;
+  color:#333;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.cat-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.05);}
+.inc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.inc-item{display:flex;align-items:flex-start;gap:12px;
+  background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);
+  border-radius:10px;padding:12px 14px;transition:all 0.25s;}
+.inc-item:hover{background:rgba(168,212,74,0.04);border-color:rgba(168,212,74,0.2);transform:translateX(4px);}
+.inc-item.special{border-color:rgba(240,192,64,0.15);background:rgba(240,192,64,0.03);}
+.inc-item.special:hover{background:rgba(240,192,64,0.06);border-color:rgba(240,192,64,0.3);}
+.inc-check{width:18px;height:18px;border-radius:50%;flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;}
+.inc-check.g{background:linear-gradient(135deg,var(--green),var(--green2));}
+.inc-check.au{background:linear-gradient(135deg,var(--gold),var(--gold2));}
+.inc-check svg{width:10px;height:10px;}
+.inc-item span{font-size:13px;color:#aaa;line-height:1.4;}
+.inc-item.special span{color:#c8a830;}
+
+/* ── PRICING ── */
+.pricing-outer{perspective:1000px;}
+.pricing-card{background:linear-gradient(135deg,rgba(13,15,10,0.95),rgba(18,22,12,0.95));
+  border:1px solid rgba(168,212,74,0.3);border-radius:24px;padding:48px;position:relative;
+  overflow:hidden;transform-style:preserve-3d;
+  box-shadow:0 60px 120px rgba(0,0,0,0.7),0 0 60px rgba(168,212,74,0.05),inset 0 1px 0 rgba(168,212,74,0.1);
+  animation:cardFloat 7s ease-in-out infinite;}
+@keyframes cardFloat{
+  0%,100%{transform:rotateX(1deg) rotateY(-1deg) translateZ(0);}
+  33%{transform:rotateX(-1deg) rotateY(2deg) translateZ(10px);}
+  66%{transform:rotateX(2deg) rotateY(-2deg) translateZ(5px);}
+}
+.pricing-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(168,212,74,0.5),transparent);}
+.pricing-card::after{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;
+  background:radial-gradient(circle,rgba(168,212,74,0.05),transparent 60%);pointer-events:none;}
+.pc-flag{display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--green),var(--green2));
+  color:#000;font-size:11px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;
+  padding:7px 18px;border-radius:30px;margin-bottom:24px;}
+.pc-name{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;margin-bottom:8px;}
+.pc-price{font-family:'Syne',sans-serif;font-size:clamp(52px,7vw,80px);font-weight:800;
+  color:var(--green);line-height:1;margin-bottom:4px;
+  text-shadow:0 0 60px rgba(168,212,74,0.3);}
+.pc-pm{font-size:14px;color:#444;margin-bottom:8px;}
+.pc-contract{display:inline-flex;align-items:center;gap:8px;
+  background:rgba(240,192,64,0.08);border:1px solid rgba(240,192,64,0.2);
+  color:var(--gold);font-size:12px;font-weight:700;padding:8px 16px;border-radius:8px;margin-bottom:36px;}
+.pr-row{display:flex;justify-content:space-between;align-items:center;
+  padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.pr-row:last-child{border:none;}
+.pr-name{font-size:15px;color:#bbb;}
+.pr-tag{font-size:12px;padding:4px 12px;border-radius:20px;font-weight:600;}
+.pr-tag.g{background:rgba(168,212,74,0.1);color:var(--green);}
+.pr-tag.au{background:rgba(240,192,64,0.1);color:var(--gold);}
+.pr-tag.n{background:rgba(255,255,255,0.05);color:#666;}
+</style>
+<style>
+/* ── TIMELINE ── */
+.timeline{display:flex;flex-direction:column;gap:0;position:relative;}
+.timeline::before{content:'';position:absolute;left:17px;top:0;bottom:0;width:2px;
+  background:linear-gradient(180deg,var(--green),var(--gold),transparent);}
+.tl-item{display:flex;gap:24px;padding:24px 0;}
+.tl-num{width:36px;height:36px;border-radius:50%;background:var(--bg);
+  border:2px solid var(--green);display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:var(--green);flex-shrink:0;z-index:1;
+  box-shadow:0 0 20px rgba(168,212,74,0.2);}
+.tl-body h4{font-size:16px;font-weight:700;color:#e0e0e0;margin-bottom:6px;}
+.tl-body p{font-size:14px;color:#555;line-height:1.65;}
+
+/* ── CTA ── */
+.cta-section{position:relative;z-index:1;padding:100px 48px;text-align:center;overflow:hidden;}
+.cta-section::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 50%,rgba(168,212,74,0.06),transparent 70%);}
+.cta-inner{max-width:640px;margin:0 auto;position:relative;}
+.cta-inner h2{font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,56px);
+  font-weight:800;letter-spacing:-2px;line-height:1.05;margin-bottom:20px;}
+.cta-inner h2 span{
+  background:linear-gradient(135deg,var(--green),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.cta-inner p{font-size:17px;color:#555;line-height:1.7;margin-bottom:48px;}
+.cta-btn{display:inline-flex;align-items:center;gap:12px;
+  background:linear-gradient(135deg,var(--green),var(--green2));
+  color:#000;font-size:16px;font-weight:800;padding:20px 52px;border-radius:50px;
+  text-decoration:none;letter-spacing:.3px;position:relative;overflow:hidden;
+  box-shadow:0 20px 60px rgba(168,212,74,0.3),0 0 0 1px rgba(168,212,74,0.5);
+  transition:all 0.3s cubic-bezier(0.23,1,0.32,1);}
+.cta-btn::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent);
+  border-radius:50px;}
+.cta-btn:hover{transform:translateY(-4px) scale(1.02);
+  box-shadow:0 30px 80px rgba(168,212,74,0.4),0 0 0 1px rgba(168,212,74,0.6);}
+.cta-btn .arrow{font-size:18px;transition:transform 0.3s;}
+.cta-btn:hover .arrow{transform:translateX(4px);}
+.cta-email{margin-top:20px;font-size:13px;color:#333;}
+.cta-email a{color:#555;text-decoration:none;border-bottom:1px solid #333;transition:color 0.2s;}
+.cta-email a:hover{color:var(--green);}
+
+/* ── FOOTER ── */
+footer{position:relative;z-index:1;padding:28px 48px;
+  border-top:1px solid rgba(255,255,255,0.04);text-align:center;}
+footer span{font-size:12px;color:#2a2a2a;}
+
+/* ── SCROLL ANIMATIONS ── */
+.reveal{opacity:0;transform:translateY(30px);transition:all 0.7s cubic-bezier(0.23,1,0.32,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:0.1s;}
+.reveal-delay-2{transition-delay:0.2s;}
+.reveal-delay-3{transition-delay:0.3s;}
+
+@media(max-width:768px){
+  nav{padding:14px 24px;}
+  .hero{padding:100px 24px 60px;}
+  .hero-card{display:none;}
+  .hero-meta-row{grid-template-columns:1fr 1fr;}
+  .section,.cta-section{padding:60px 24px;}
+  .focus-grid{grid-template-columns:1fr;}
+  .inc-grid{grid-template-columns:1fr;}
+  .cred-bar{padding:24px;}
+  .pricing-card{padding:32px 24px;}
+  footer{padding:24px;}
+}
+</style>
+</head>
+<body>
+
+<!-- BG ORBS -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Growth OS</div>
+  <div class="nav-badge"><div class="blinkit-dot"></div>Ex-Blinkit · Confidential Proposal</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <div class="pill pill-green">⚡ Flagship Plan</div>
+      <div class="pill pill-gold"><span class="icon">⚡</span>Ex-Blinkit Growth Manager</div>
+    </div>
+    <h1>
+      <span class="line1">Scale Ved Sanjeevani.</span>
+      <span class="line2">Dominate QCommerce.</span>
+    </h1>
+    <p class="hero-sub">A strategic growth consulting engagement for <strong style="color:#ccc">Ved Sanjeevani</strong> — guided by insider knowledge of how Blinkit's algorithm, ops, and ranking systems actually work.</p>
+    <div class="hero-meta-row">
+      <div class="meta-box"><div class="ml">Prepared for</div><div class="mv">Ved Sanjeevani</div></div>
+      <div class="meta-box"><div class="ml">Plan</div><div class="mv">Growth OS</div></div>
+      <div class="meta-box"><div class="ml">Investment</div><div class="mv green">₹1,49,999/mo</div></div>
+      <div class="meta-box"><div class="ml">Date</div><div class="mv">June 2026</div></div>
+    </div>
+  </div>
+
+  <!-- Floating pricing preview card -->
+  <div class="hero-card">
+    <div class="hc-label">Growth OS · Flagship</div>
+    <div class="hc-price">₹1,49,999</div>
+    <div class="hc-pm">per month · min 3 months</div>
+    <div class="hc-item"><div class="hc-dot gold"></div><span>Ex-Blinkit Manager</span></div>
+    <div class="hc-item"><div class="hc-dot"></div><span>Full Content Optimization</span></div>
+    <div class="hc-item"><div class="hc-dot"></div><span>New Product Development</span></div>
+    <div class="hc-item"><div class="hc-dot"></div><span>Variant Strategy</span></div>
+    <div class="hc-item"><div class="hc-dot"></div><span>Inventory Optimization</span></div>
+    <div class="hc-item"><div class="hc-dot gold"></div><span>Ticketing Consulting</span></div>
+    <div class="hc-item"><div class="hc-dot"></div><span>Monthly Business Reviews</span></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CREDIBILITY BAR -->
+<div class="cred-bar">
+  <div class="cred-inner">
+    <div class="cred-logo">
+      <div class="blinkit-badge">blinkit</div>
+      <div class="cred-arrow">→</div>
+    </div>
+    <div class="cred-text">
+      <h3>Led by an Ex-Blinkit Growth Expert</h3>
+      <p>Inside knowledge of how Blinkit's algorithms, dark store ops, and brand ranking systems actually work — now working for your brand.</p>
+    </div>
+    <div class="cred-stats">
+      <div class="cred-stat"><div class="n">50+</div><div class="l">Brands Scaled</div></div>
+      <div class="cred-stat"><div class="n">3x</div><div class="l">Avg Revenue Growth</div></div>
+      <div class="cred-stat"><div class="n">95%</div><div class="l">Fill Rate Achieved</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- FOCUS AREAS -->
+<div class="section reveal">
+  <div class="sec-label">Core Focus</div>
+  <h2>Where We Drive<br/>Impact for You</h2>
+  <div class="focus-grid">
+    <div class="focus-card reveal reveal-delay-1">
+      <div class="fc-icon">📝</div>
+      <h3>Content & Catalogue Optimization</h3>
+      <p>Full revamp of titles, descriptions, A+ content, images, keywords and search terms — built for Blinkit's ranking algorithm.</p>
+    </div>
+    <div class="focus-card reveal reveal-delay-2">
+      <div class="fc-icon">🧪</div>
+      <h3>New Product Development</h3>
+      <p>Identify white spaces in the Ayurvedic segment and launch new SKUs backed by real platform data and demand signals.</p>
+    </div>
+    <div class="focus-card gold-card reveal reveal-delay-3">
+      <div class="fc-icon gold">🧴</div>
+      <h3>Add-ons & Variant Selection</h3>
+      <p>Strategic variant planning — sizes, combos, gift sets — to capture a wider audience and increase average order value.</p>
+    </div>
+    <div class="focus-card reveal reveal-delay-1">
+      <div class="fc-icon">📦</div>
+      <h3>Inventory & Availability</h3>
+      <p>Fill rate monitoring, demand forecasting, and stock management across all dark stores to eliminate out-of-stock losses.</p>
+    </div>
+    <div class="focus-card gold-card reveal reveal-delay-2">
+      <div class="fc-icon gold">🎫</div>
+      <h3>Ticketing Consulting</h3>
+      <p>Strategic guidance on how to handle returns, disputes, account flags, and listing issues — so your team resolves them faster and smarter.</p>
+    </div>
+    <div class="focus-card reveal reveal-delay-3">
+      <div class="fc-icon">📊</div>
+      <h3>KPI & Competitor Analysis</h3>
+      <p>Monthly deep-dives with benchmarking against category competitors, search share tracking, and a clear growth roadmap.</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- INCLUSIONS -->
+<div class="section reveal">
+  <div class="sec-label">Scope of Work</div>
+  <h2>Everything That's<br/>Included</h2>
+
+  <div class="cat-block">
+    <div class="cat-title">Catalogue & Content</div>
+    <div class="inc-grid">
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Catalogue Revamp</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Content Revamp</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Up to 80 SKU Optimization</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>PDP &amp; PLP Optimization</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Keyword Optimization</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Search Term Optimization</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>A+ Content Creation</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Catalog Health Monitoring</span></div>
+    </div>
+  </div>
+
+  <div class="cat-block">
+    <div class="cat-title">Growth & Strategy</div>
+    <div class="inc-grid">
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Portfolio Planning</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Assortment Planning</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Pricing &amp; Promo Optimization</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Search Share Optimization</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>KPI Analysis</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Monthly Business Reviews</span></div>
+    </div>
+  </div>
+
+  <div class="cat-block">
+    <div class="cat-title">Inventory & Operations</div>
+    <div class="inc-grid">
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Fill Rate Optimization</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Availability Optimization</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Inventory Forecasting</span></div>
+      <div class="inc-item"><div class="inc-check g"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Seller Hub Support</span></div>
+    </div>
+  </div>
+
+  <div class="cat-block">
+    <div class="cat-title">✦ Exclusive — Growth OS Only</div>
+    <div class="inc-grid">
+      <div class="inc-item special"><div class="inc-check au"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>New Product Development</span></div>
+      <div class="inc-item special"><div class="inc-check au"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Add-ons &amp; Variant Selection</span></div>
+      <div class="inc-item special"><div class="inc-check au"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Ticketing Strategy &amp; Consulting</span></div>
+      <div class="inc-item special" style="grid-column:1/-1"><div class="inc-check au"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Dedicated Ex-Blinkit Growth Manager</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<div class="section reveal">
+  <div class="sec-label">Investment</div>
+  <h2>Simple, Transparent<br/>Pricing</h2>
+  <div class="pricing-outer">
+    <div class="pricing-card">
+      <div class="pc-flag">⚡ Flagship</div>
+      <div class="pc-name">Growth OS</div>
+      <div class="pc-price">₹1,49,999</div>
+      <div class="pc-pm">per month</div>
+      <div class="pc-contract">📋 Minimum Commitment: 3 Months</div>
+      <div class="pr-row"><span class="pr-name">Monthly Retainer</span><span class="pr-tag g">₹1,49,999 / month</span></div>
+      <div class="pr-row"><span class="pr-name">Contract Term</span><span class="pr-tag au">Min. 3 Months</span></div>
+      <div class="pr-row"><span class="pr-name">Ticketing Strategy &amp; Consulting</span><span class="pr-tag g">Included</span></div>
+      <div class="pr-row"><span class="pr-name">New Product Development</span><span class="pr-tag g">Included</span></div>
+      <div class="pr-row"><span class="pr-name">Variant &amp; Add-on Strategy</span><span class="pr-tag g">Included</span></div>
+      <div class="pr-row"><span class="pr-name">Inventory &amp; Availability Optimization</span><span class="pr-tag g">Included</span></div>
+      <div class="pr-row"><span class="pr-name">Dedicated Ex-Blinkit Growth Manager</span><span class="pr-tag au">Included</span></div>
+      <div class="pr-row"><span class="pr-name">Monthly Business Reviews</span><span class="pr-tag g">Included</span></div>
+      <div class="pr-row"><span class="pr-name">Additional SKU</span><span class="pr-tag n">₹25 per SKU</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-inner">
+    <a href="mailto:stakeharsh81@gmail.com?subject=Accepting Growth OS Proposal — Ved Sanjeevani&body=Hi Harsh,%0A%0AI'd like to accept the Growth OS proposal for Ved Sanjeevani.%0A%0APlease share the agreement and next steps.%0A%0AThank you." class="cta-btn">
+      Accept This Proposal <span class="arrow">→</span>
+    </a>
+    <p class="cta-email">Or write directly to <a href="mailto:stakeharsh81@gmail.com">stakeharsh81@gmail.com</a></p>
+  </div>
+</div>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+  document.querySelectorAll('.focus-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      card.style.transform = `translateY(-12px) rotateX(${-y*10}deg) rotateY(${x*10}deg)`;
+    });
+    card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+  });
+  const pricingCard = document.querySelector('.pricing-card');
+  if(pricingCard){
+    pricingCard.addEventListener('mousemove', e => {
+      const r = pricingCard.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      pricingCard.style.animation = 'none';
+      pricingCard.style.transform = `rotateX(${-y*6}deg) rotateY(${x*6}deg) translateZ(10px)`;
+    });
+    pricingCard.addEventListener('mouseleave', () => {
+      pricingCard.style.transform = '';
+      pricingCard.style.animation = '';
+    });
+  }
+</script>
+</body>
+</html>
